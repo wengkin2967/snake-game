@@ -4,6 +4,10 @@ import time
 
 delay = 0.1
 
+# Score
+score = 0
+high_score = 0
+
 # Set up the screen
 window = turtle.Screen()
 window.title("Snake Game by Weng Kin Lee")
@@ -31,6 +35,16 @@ food.goto(0,100)
 # Snake Body
 segments = []
 
+# Pen for writing score.
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape("square")
+pen.color("white")
+pen.penup()
+pen.hideturtle()
+pen.goto(0,260)
+pen.write("Score: 0 High Score: 0", align="center", font=("Century Gothic", 24, "bold"))
+
 # Functions
 def go_up():
     if head.direction != "down":
@@ -45,7 +59,7 @@ def go_left():
         head.direction = "left"
 
 def go_right():
-    if head.direction != "left":    
+    if head.direction != "left":
         head.direction = "right"
 
 def move():
@@ -94,13 +108,18 @@ while True:
         # Clear the segments list
         segments.clear()
 
+        # Resets Score
+        score = 0
+        pen.clear()
+        pen.write("Score: {} Hight Score: {}".format(score,high_score),\
+         align="center", font=("Century Gothic", 24, "bold"))
+
     # Check for collision with the food.
     if head.distance(food) < 20:
         # Move the food to a random spot.
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
         food.goto(x, y)
-
 
         # Add a segment
         new_segment = turtle.Turtle()
@@ -109,6 +128,15 @@ while True:
         new_segment.color("grey")
         new_segment.penup()
         segments.append(new_segment)
+
+        # Increase the Score
+        score += 10
+        if score > high_score:
+            high_score = score
+
+        pen.clear()
+        pen.write("Score: {} Hight Score: {}".format(score,high_score),\
+         align="center", font=("Century Gothic", 24, "bold"))
 
 
     # Move the end segments first in reverse order
@@ -139,6 +167,11 @@ while True:
             # Clear the segments list
             segments.clear()
 
+            # Resets Score
+            score = 0
+            pen.clear()
+            pen.write("Score: {} Hight Score: {}".format(score,high_score),\
+             align="center", font=("Century Gothic", 24, "bold"))
 
     time.sleep(delay)
 
