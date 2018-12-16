@@ -4,6 +4,9 @@ import time
 
 delay = 0.1
 
+# Obstacle Count
+obs_count = 0
+
 # Score
 score = 0
 high_score = 0
@@ -14,6 +17,9 @@ window.title("Snake Game by Weng Kin Lee")
 window.bgcolor("green")
 window.setup(width=600, height=600)
 window.tracer(0) # Turns off screen updates
+
+# Obstacle
+obstacles = []
 
 # Snake Head
 head = turtle.Turtle()
@@ -79,6 +85,17 @@ def move():
         x = head.xcor()
         head.setx(x + 20)
 
+def generate_obs(obs_count):
+    obs = turtle.Turtle()
+    obs.speed(0)
+    obs.shape("square")
+    obs.color("blue")
+    obs.penup()
+    obs.goto(random.randint(-290, 290),random.randint(-290, 290))
+    obs.direction = "stop"
+    obstacles.append(obs)
+    return len(obstacles)
+
 # Keyboard bindings
 window.listen()
 window.onkeypress(go_up, "w")
@@ -105,8 +122,13 @@ while True:
         for segment in segments:
             segment.goto(1000,1000)
 
-        # Clear the segments list
+        # Hide obs
+        for obs in obstacles:
+            obs.goto(1000,1000)
+
+        # Clear the segments list and obs
         segments.clear()
+        obstacles.clear()
 
         # Resets Score
         score = 0
@@ -128,6 +150,10 @@ while True:
         new_segment.color("grey")
         new_segment.penup()
         segments.append(new_segment)
+
+        # Generate new obstacle
+        if(obs_count <= 10):
+            obs_count = generate_obs(obs_count)
 
         # Increase the Score
         score += 10
@@ -164,11 +190,42 @@ while True:
             for segment in segments:
                 segment.goto(1000,1000)
 
-            # Clear the segments list
+            # Hide obs
+            for obs in obstacles:
+                obs.goto(1000,1000)
+
+            # Clear the segments list and obs
             segments.clear()
+            obstacles.clear()
 
             # Resets Score
             score = 0
+            pen.clear()
+            pen.write("Score: {} Hight Score: {}".format(score,high_score),\
+             align="center", font=("Century Gothic", 24, "bold"))
+
+    # Check collision with obstacle
+    for obs in obstacles:
+        if obs.distance(head) < 20:
+            time.sleep(0.5)
+            head.goto(0,0)
+            head.direction ="stop"
+
+            # Hide Segments
+            for segment in segments:
+                segment.goto(1000,1000)
+
+            # Hide obs
+            for obs in obstacles:
+                obs.goto(1000,1000)
+
+            # Clear the segments list and obs
+            segments.clear()
+            obstacles.clear()
+
+            # Resets Score and obs_Count
+            score = 0
+            obs_count = 0
             pen.clear()
             pen.write("Score: {} Hight Score: {}".format(score,high_score),\
              align="center", font=("Century Gothic", 24, "bold"))
