@@ -76,12 +76,27 @@ window.onkeypress(go_right, "Right")
 while True:
     window.update()
 
+    # Check for a collision with the border
+    if head.xcor()>290 or head.xcor()<-290 or \
+    head.ycor()>290 or head.ycor()<-290:
+        time.sleep(0.5)
+        head.goto(0,0)
+        head.direction = "stop"
+
+        # Hide Segments
+        for segment in segments:
+            segment.goto(1000,1000)
+
+        # Clear the segments list
+        segments.clear()
+        
     # Check for collision with the food.
     if head.distance(food) < 20:
         # Move the food to a random spot.
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
         food.goto(x, y)
+
 
         # Add a segment
         new_segment = turtle.Turtle()
