@@ -85,6 +85,7 @@ def move():
         x = head.xcor()
         head.setx(x + 20)
 
+# Generate obstacles in the map.
 def generate_obs(obs_count):
     obs = turtle.Turtle()
     obs.speed(0)
@@ -95,6 +96,32 @@ def generate_obs(obs_count):
     obs.direction = "stop"
     obstacles.append(obs)
     return len(obstacles)
+
+# Clears the map and restarts the Game
+def restart():
+    time.sleep(0.5)
+    head.goto(0,0)
+    head.direction = "stop"
+
+    # Hide Segments
+    for segment in segments:
+        segment.goto(1000,1000)
+
+    # Hide obs
+    for obs in obstacles:
+        obs.goto(1000,1000)
+
+    # Clear the segments list and obs
+    segments.clear()
+    obstacles.clear()
+
+    # Resets Score
+    score = 0
+    pen.clear()
+    pen.write("Score: {} High Score: {}".format(score,high_score),\
+     align="center", font=("Century Gothic", 24, "bold"))
+
+
 
 # Keyboard bindings
 window.listen()
@@ -114,27 +141,7 @@ while True:
     # Check for a collision with the border
     if head.xcor()>290 or head.xcor()<-290 or \
     head.ycor()>290 or head.ycor()<-290:
-        time.sleep(0.5)
-        head.goto(0,0)
-        head.direction = "stop"
-
-        # Hide Segments
-        for segment in segments:
-            segment.goto(1000,1000)
-
-        # Hide obs
-        for obs in obstacles:
-            obs.goto(1000,1000)
-
-        # Clear the segments list and obs
-        segments.clear()
-        obstacles.clear()
-
-        # Resets Score
-        score = 0
-        pen.clear()
-        pen.write("Score: {} Hight Score: {}".format(score,high_score),\
-         align="center", font=("Century Gothic", 24, "bold"))
+        restart()
 
     # Check for collision with the food.
     if head.distance(food) < 20:
@@ -152,7 +159,7 @@ while True:
         segments.append(new_segment)
 
         # Generate new obstacle
-        if(obs_count <= 10):
+        if(obs_count <= 20):
             obs_count = generate_obs(obs_count)
 
         # Increase the Score
@@ -161,7 +168,7 @@ while True:
             high_score = score
 
         pen.clear()
-        pen.write("Score: {} Hight Score: {}".format(score,high_score),\
+        pen.write("Score: {} High Score: {}".format(score,high_score),\
          align="center", font=("Century Gothic", 24, "bold"))
 
 
@@ -182,53 +189,13 @@ while True:
     # Check for head collision with the body Segments
     for segment in segments:
         if segment.distance(head) < 20:
-            time.sleep(0.5)
-            head.goto(0,0)
-            head.direction = "stop"
+            restart()
 
-            # Hide Segments
-            for segment in segments:
-                segment.goto(1000,1000)
-
-            # Hide obs
-            for obs in obstacles:
-                obs.goto(1000,1000)
-
-            # Clear the segments list and obs
-            segments.clear()
-            obstacles.clear()
-
-            # Resets Score
-            score = 0
-            pen.clear()
-            pen.write("Score: {} Hight Score: {}".format(score,high_score),\
-             align="center", font=("Century Gothic", 24, "bold"))
 
     # Check collision with obstacle
     for obs in obstacles:
         if obs.distance(head) < 20:
-            time.sleep(0.5)
-            head.goto(0,0)
-            head.direction ="stop"
-
-            # Hide Segments
-            for segment in segments:
-                segment.goto(1000,1000)
-
-            # Hide obs
-            for obs in obstacles:
-                obs.goto(1000,1000)
-
-            # Clear the segments list and obs
-            segments.clear()
-            obstacles.clear()
-
-            # Resets Score and obs_Count
-            score = 0
-            obs_count = 0
-            pen.clear()
-            pen.write("Score: {} Hight Score: {}".format(score,high_score),\
-             align="center", font=("Century Gothic", 24, "bold"))
+            restart()
 
     time.sleep(delay)
 
