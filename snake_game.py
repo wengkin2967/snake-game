@@ -4,6 +4,12 @@ import time
 
 delay = 0.1
 
+
+# Set up menu
+window = turtle.Screen()
+window.title("Snake Game by Weng Kin Lee")
+window.setup(width=600, height=600)
+
 # Obstacle Count
 obs_count = 0
 
@@ -12,10 +18,8 @@ score = 0
 high_score = 0
 
 # Set up the screen
-window = turtle.Screen()
-window.title("Snake Game by Weng Kin Lee")
+
 window.bgcolor("green")
-window.setup(width=600, height=600)
 window.tracer(0) # Turns off screen updates
 
 # Obstacle
